@@ -1,7 +1,26 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import DataTable from "./DataTable";
+import axios from "axios";
 
 const TeamMembers = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/members");
+        console.log("Json Response", response.data);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching members:", error);
+      }
+    };
+
+    fetchMembers();
+  }, []);
+
+  console.log("Team members Data : ", data);
+
   return (
     <div className="main">
       <div className="container">
@@ -16,7 +35,7 @@ const TeamMembers = () => {
           </div>
         </div>
         <div className="table-container">
-          <DataTable />
+          <DataTable data={data} />
         </div>
       </div>
     </div>

@@ -5,12 +5,10 @@
   margin: 0;
   padding: 0;
   font-family: "Inter", sans-serif;
-
 }
 
 body {
   background-color: rgba(211, 211, 211, 0.212);
-  
 }
 
 .main {
@@ -78,3 +76,21 @@ body {
 .btn-delete-all:hover {
   background-color: #7f56d9d0;
 }
+
+/* table css starts from here  */
+
+#tab-heading {
+  border: 1px solid green !important;
+  text-align: left;
+  color: #667085;
+  font-size: 12px;
+}
+
+#table-data {
+  color: #667085;
+  font-weight: 400;
+  font-size: 14px;
+  border: 1px solid #101828;
+}
+
+/* table css end  here  */
