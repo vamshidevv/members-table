@@ -22,6 +22,8 @@ body {
   height: 100%;
   border: 1px solid black;
   background-color: #fff;
+  box-shadow: 0px 2px 4px -2px;
+  border-radius: 8px;
 }
 .header {
   width: 100%;
@@ -73,6 +75,19 @@ body {
   font-weight: 500;
 }
 
+/* disabled btn css */
+
+.btn-delete-all:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.btn-delete-all:disabled:hover {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+}
+
 .btn-delete-all:hover {
   background-color: #7f56d9d0;
 }
@@ -80,7 +95,7 @@ body {
 /* table css starts from here  */
 
 #tab-heading {
-  border: 1px solid green !important;
+  border: 1px solid green;
   text-align: left;
   color: #667085;
   font-size: 12px;
@@ -89,8 +104,43 @@ body {
 #table-data {
   color: #667085;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 13px;
   border: 1px solid #101828;
+  height: 50px !important;
+  padding: 5px;
+  letter-spacing: 0.5px;
+}
+
+#user-details-container {
+  display: flex;
+  gap: 0.7rem;
+  border: 1px solid purple;
+  align-items: center;
+}
+
+#name {
+  color: #101828;
+  font-weight: 500;
+  font-size: 14px;
+  border: 1px solid red;
+  margin: 0;
+  padding: 0;
+}
+
+#username {
+  color: #667085;
+  font-weight: 400;
+  font-size: 14px;
+  border: 1px solid red;
+  margin: 0;
+  padding: 0;
+}
+
+#profile-img {
+  /* border: 1px solid orange; */
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
 }
 
 /* table css end  here  */
