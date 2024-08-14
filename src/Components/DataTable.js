@@ -6,93 +6,159 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useState, useEffect } from "react";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
-// import TablePagination from "@mui/material/TablePagination";
-// import { useState, useEffect } from "react";
-// import axios from "axios";
+// Delete User Modal
+const DeleteUserModal = ({ onDelete, onCancel }) => {
+  return (
+    <div className="modal-container">
+      <div className="modal-content">
+        <div className="modal-content-details">
+          <p>Are you sure you want to delete this user?</p>
+          <div className="modal-buttons">
+            <button className="cancel-btn" onClick={onCancel}>
+              Cancel
+            </button>
+            <button className="confirm-btn" onClick={onDelete}>
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-// const columns = [
-//   { id: "name", label: "Name", minWidth: 170 },
-//   { id: "code", label: "Status", minWidth: 100 },
-//   {
-//     id: "population",
-//     label: "Role",
-//     minWidth: 170,
-//     align: "right",
-//     format: (value) => value.toLocaleString("en-US"),
-//   },
-//   {
-//     id: "size",
-//     label: "Email address",
-//     minWidth: 170,
-//     align: "right",
-//     format: (value) => value.toLocaleString("en-US"),
-//   },
-//   {
-//     id: "density",
-//     label: "Teams",
-//     minWidth: 170,
-//     align: "right",
-//     format: (value) => value.toFixed(2),
-//   },
-// ];
+// Success Modal
+const SuccessModal = ({ onClose }) => {
+  return (
+    <div className="modal-container">
+      <div className="successfull-content">
+        <div className="success-icon">
+          <p>Users successfully deleted!</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-// function createData(name, code, population, size) {
-//   const density = population / size;
-//   return { name, code, population, size, density };
-// }
+// Edit User Modal
+// EditUserModal Example
+const EditUserModal = ({ user, onConfirm, onClose }) => {
+  // Validation to ensure user is not an object being directly rendered
+  const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [role, setRole] = useState(user?.role || "");
 
-// const rows = [
-//   createData("India", "IN", 1324171354, 3287263),
-//   createData("China", "CN", 1403500365, 9596961),
-//   createData("Italy", "IT", 60483973, 301340),
-//   createData("United States", "US", 327167434, 9833520),
-//   createData("Canada", "CA", 37602103, 9984670),
-//   createData("Australia", "AU", 25475400, 7692024),
-//   createData("Germany", "DE", 83019200, 357578),
-//   createData("Ireland", "IE", 4857000, 70273),
-//   createData("Mexico", "MX", 126577691, 1972550),
-//   createData("Japan", "JP", 126317000, 377973),
-//   createData("France", "FR", 67022000, 640679),
-//   createData("United Kingdom", "GB", 67545757, 242495),
-//   createData("Russia", "RU", 146793744, 17098246),
-//   createData("Nigeria", "NG", 200962417, 923768),
-//   createData("Brazil", "BR", 210147125, 8515767),
-// ];
+  useEffect(() => {
+    setName(user?.name || "");
+    setEmail(user?.email || "");
+    setRole(user?.role || "");
+  }, [user]);
 
+  return (
+    <div className="modal-container">
+      <div className="edit-modal-content">
+        <h3>Edit User</h3>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <select value={role} onChange={(e) => setRole(e.target.value)}>
+          <option value="" disabled>
+            Select Role
+          </option>
+          <option value="Admin">Admin</option>
+          <option value="Editor">Editor</option>
+          <option value="Viewer">Viewer</option>
+        </select>
+        <div className="modal-buttons">
+          <button className="cancel-btn" onClick={onClose}>
+            Cancel
+          </button>
+          <button
+            className="confirm-btn"
+            onClick={() => onConfirm({ ...user, name, email, role })}
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// DataTable Component
 export default function DataTable({ header, data }) {
-  // header and table data retreived with the the help of props
-  //   const [row, setRow] = useState({data});
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [value, setValue] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  //   useEffect(() => {
-  //     const fetchMembers = async () => {
-  //       try {
-  //         const response = await axios.get("http://localhost:3000/members");
-  //         console.log("Json Response", response.data);
-  //         setRow(response.data);
-  //       } catch (error) {
-  //         console.error("Error fetching members:", error);
-  //       }
-  //     };
+  useEffect(() => {
+    setValue(data);
+  }, [data]);
 
-  //     fetchMembers();
-  //   }, []);
+  useEffect(() => {
+    let timer;
+    if (isSuccessModalOpen) {
+      timer = setTimeout(() => {
+        setIsSuccessModalOpen(false);
+      }, 2000);
+    }
+    return () => clearTimeout(timer);
+  }, [isSuccessModalOpen]);
 
-  //   const [page, setPage] = React.useState(0);
-  //   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const handleDelete = () => {
+    const newData = [...value];
+    newData.splice(currentIndex, 1);
+    setValue(newData);
 
-  //   const handleChangePage = (event, newPage) => {
-  //     setPage(newPage);
-  //   };
+    setIsDeleteModalOpen(false);
+    setIsSuccessModalOpen(true);
+  };
 
-  //   const handleChangeRowsPerPage = (event) => {
-  //     setRowsPerPage(+event.target.value);
-  //     setPage(0);
-  //   };
+  const handleCancel = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleCloseSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+  };
+
+  const openDeleteModal = (index) => {
+    setCurrentIndex(index);
+    setIsDeleteModalOpen(true);
+  };
+
+  const openEditModal = (user) => {
+    setCurrentUser(user);
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditConfirm = (updatedUser) => {
+    const updatedData = value.map((user) =>
+      user.id === updatedUser.id ? updatedUser : user
+    );
+    setValue(updatedData);
+    setIsEditModalOpen(false);
+  };
 
   return (
     <Paper sx={{ width: "100%" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer sx={{ maxHeight: 650 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -102,14 +168,6 @@ export default function DataTable({ header, data }) {
                   key={column.id}
                   align={column.align}
                   style={{ top: 0, minWidth: column.minWidth }}
-
-                  //   sx={{
-                  //     border: "1px solid green",
-                  //     textAlign: "left",
-                  //     color: "#667085",
-                  //     fontSize: "12px",
-                  //     fontWeight: 500,
-                  //   }}
                 >
                   {column.label}
                 </TableCell>
@@ -117,11 +175,8 @@ export default function DataTable({ header, data }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((member) => (
-              <TableRow
-                key={member.id}
-                // sx={{ "&:last-child td, &:last-child th": { border: 0  , } }}
-              >
+            {value.map((member, index) => (
+              <TableRow key={member.id}>
                 <TableCell id="table-data">
                   <div id="user-details-container">
                     <input type="checkbox" />
@@ -133,60 +188,63 @@ export default function DataTable({ header, data }) {
                   </div>
                 </TableCell>
                 <TableCell id="table-data">
-                  <div
-                    style={{
-                      backgroundColor: "#ECFDF3",
-                      height: "22px",
-                      width: "84px",
-                      borderRadius: "16px",
-                      display: "flex",
-                      alignItems: "center",
-                      //   gap:"6px",
-                      justifyContent: "space-around",
-                    }}
-                  >
+                  <div id={member.isActive ? "active" : "inactive"}>
                     <div
-                      style={{
-                        height: "6px",
-                        width: "6px",
-                        backgroundColor: "#12B76A",
-                        borderRadius: "50%",
-                      }}
+                      id={member.isActive ? "active-bullet" : "inactive-bullet"}
                     ></div>
-                    <p
-                      style={{
-                        color: "#027A48",
-                        fontSize: "12px",
-                        gap: "15px",
-                      }}
-                    >
-                      {member.isActive ? "Active" : "Inactive"}
-                    </p>
+                    <p>{member.isActive ? "Active" : "Inactive"}</p>
                   </div>
                 </TableCell>
                 <TableCell id="table-data">{member.role}</TableCell>
                 <TableCell id="table-data">{member.email}</TableCell>
                 <TableCell id="table-data">
                   <div id="teams-container">
-                    <div id="teams-first">{member.teams[0]}</div>
-                    <div id="teams-second">{member.teams[1]}</div>
-                    <div id="teams-third">{member.teams[2]}</div>
+                    {member.teams[0] && (
+                      <div id="teams-first">{member.teams[0]}</div>
+                    )}
+                    {member.teams[1] && (
+                      <div id="teams-second">{member.teams[1]}</div>
+                    )}
+                    {member.teams[2] && (
+                      <div id="teams-third">{member.teams[2]}</div>
+                    )}
                   </div>
+                </TableCell>
+                <TableCell style={{ display: "flex" }}>
+                  <div>
+                    <button onClick={() => openDeleteModal(index)} id="del-btn">
+                      <DeleteOutlineIcon id="del-icon" />
+                    </button>
+
+                    {isDeleteModalOpen && (
+                      <DeleteUserModal
+                        onDelete={handleDelete}
+                        onCancel={handleCancel}
+                      />
+                    )}
+
+                    {isSuccessModalOpen && (
+                      <SuccessModal onClose={handleCloseSuccessModal} />
+                    )}
+                  </div>
+
+                  <button id="edit-btn" onClick={() => openEditModal(member)}>
+                    <ModeEditOutlineOutlinedIcon id="edit-icon" />
+                  </button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={row.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
+
+      {isEditModalOpen && (
+        <EditUserModal
+          user={currentUser}
+          onConfirm={handleEditConfirm}
+          onClose={() => setIsEditModalOpen(false)}
+        />
+      )}
     </Paper>
   );
 }

@@ -27,6 +27,12 @@ const TeamMembers = () => {
       minWidth: 170,
       format: (value) => value.toFixed(2),
     },
+    {
+      id: "action",
+      label: "",
+      minWidth: 150,
+      format: (value) => value.toFixed(2),
+    },
   ];
 
   useEffect(() => {
@@ -41,7 +47,6 @@ const TeamMembers = () => {
     };
     setHeader(columns);
     fetchMembers();
-
   }, []);
 
   console.log("Team members Data : ", data);
