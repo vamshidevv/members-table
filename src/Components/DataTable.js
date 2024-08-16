@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { useState, useEffect } from "react";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import successIcon from "../assets/images/Featured icon.png"
 
 // Delete User Modal
 const DeleteUserModal = ({ onDelete, onCancel }) => {
@@ -37,7 +38,9 @@ const SuccessModal = ({ onClose }) => {
     <div className="modal-container">
       <div className="successfull-content">
         <div className="success-icon">
+          <img src={successIcon} alt="successIcon" />
           <p>Users successfully deleted!</p>
+          
         </div>
       </div>
     </div>
